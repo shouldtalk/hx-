@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Document</title><link rel=stylesheet href=../css/index.css><style>*{margin:0;padding:0;color:red}li,ol,ul{list-style:none}a,a:active,a:hover{text-decoration:none}img{display:block;width:100%;height:100%}</style></head><body><h1></h1><script>// 定义一个函数,专门生成table表格内容
+        // 参数:需要根据生成table表格的数组
+        function setTable(array) {
+            let str = '';
+            // item 是 数组的单元,就是存储每一行内容的对象
+            array.forEach((item) => {
+                str += `
+                    <tr>
+                        <td>${item.id}</td>
+                        <td>${item.name}</td>
+                        <td>${item.sex}</td>
+                        <td>${item.age}</td>
+                        <td>${item.city}</td>
+                        <td>${item.dep}</td>
+                        <td>${item.pay}</td>
+                        <td><button index="${item.id}" name="del">删除</button></td>
+                        <td><button index="${item.id}" name="update">修改</button></td>
+                    </tr>
+                `;
+            });
+
+            return str;
+        }
+
+
+        // 设定cookie函数
+        // 参数1:cookie的键名
+        // 参数2:cookie的键值
+        // 参数3:cookie的时效
+        function mySetCookie(key, value, time) {
+            // 1,定义时间对象
+            const nowTime = new Date();
+
+            // 2,获取当前时间对象的时间戳 / 单位是毫秒
+            let timeStamp = nowTime.getTime();
+
+            // 3,将当前中国时区的时间转化为世界标准时间 -8小时时差的 毫秒数
+            timeStamp -= 8 * 60 * 60 * 1000;
+
+            // 4,当前的时间要加上 时效的秒数 转化为毫秒数
+            // 结果是 设定 cookie的时效 的 时间戳毫秒数
+            timeStamp += time * 1000;
+
+            // 5,将这个时效的时间戳秒数 , 设定给当前的时间对象
+            nowTime.setTime(timeStamp);
+
+            // 6,设定变量,存储空字符串,或者时间对象
+
+            // 设定一个变量,如果参数3,time有数据,这个变量,存储的是 nowTime 时间对象
+            //             如果参数3,time没有数据,这个变量,存储的是 '' 空字符串
+            let t = time === undefined ? '' : nowTime;
+
+            // 7,设定cookie
+            // JavaScript中,通过 document.cookie 来设定 cookie 键值对
+            // 应该是  document.cookie = '键名=数值'  键值对字符串
+            // 现在 键名是 形参 key 键值是 形参 value,需要解析,使用模板字符串
+            // document.cookie = `${key}=${value}'
+            // 键值对之后,所有的设定都是 对这个键值对的 修饰/属性设定
+            // expires : 设定这个 cookie 键值对的时效性
+            //           expires=''       空字符串 cookie的时效性就是 session 会话时效
+            //           expires=时间对象  cookie的时效性就是这个时间对象的 时间戳表示的时间
+            // path : 设定cookie的访问路径
+            //        / 表示根目录  当前的 根目录是 www 只要 www文件夹中的 文件都可以访问
+            //        实际项目中,可以根据需求来设定
+            //        
+            document.cookie = `${key}=${value};expires=${t};path=/`;
+
+        }
+
+
+        function myGetCookie() {
+            // 将cookie字符串,按照 分号空格 为间隔符号,转化为数组
+            // 在按照 =等号 转化为数组 数组[0] 是对象的键名 数组[1]是对象的键值
+
+            // 1,获取cookie字符串
+            let str = document.cookie;
+            var obj = {};
+            var arr1 = str.split('; ');
+            arr1.forEach(function (v) {
+                var arr2 = v.split('=');
+                obj[arr2[0]] = arr2[1];
+            })
+            return obj;
+        }</script></body></html>
